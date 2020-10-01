@@ -1,0 +1,53 @@
+//       //QString("UPDATE pi_test.raspi SET name = 'ans' WHERE id= %21").arg(name);
+//       //QString text = QString("UPDATE raspi SET name = 'WD-ELDGEEL' WHERE id = 21");
+//       //dgqry.exec(text);
+//       //QString text = QString("DELETE FROM raspi WHERE id = 7");
+//       //dgqry.exec(text);
+//       //qDebug()<<"Data Deleted";
+//       //qDebug()<<"Data Updated";
+//        QString text = QString("SELECT name FROM raspi WHERE id=21");
+//        dgqry.exec(text);
+//       while (dgqry.next()) {
+//              QString name = dgqry.value(0).toString();
+//              ui->label->setText(name);
+//              qDebug()<<name;
+
+
+//       }
+
+
+
+
+
+void MainWindow::calling_DB(){
+        qDebug()<<"DB-is being called";
+        db_check();
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+        calling_DB();
+
+}
+
+void MainWindow::processNewCardFromDb(){
+    QString text = QString("SELECT id FROM raspi WHERE name = 'name'");
+    dgqry.exec(text);
+
+    cardReader.run();
+    qDebug()<<"New card is read";
+
+    }
+    
+    
+    
+  //  
+    
+    void MainWindow::db_check(){
+ qDebug()<<"In-check";
+ QString text = QString("INSERT INTO pi_test.raspi(name,id) VALUES('%1', %2)").arg("M22.F").arg(21);
+ dgqry.exec(text);
+ qDebug()<<"Values Inserted";
+
+}
+
