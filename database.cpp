@@ -961,9 +961,3 @@ void Database::logInformation(QString employee_id, QString gsid, QString taken, 
     dgqry.exec(welcome);
     qDebug()<<"LogInfoInserte";
 }
-
-
-
-
-
-
