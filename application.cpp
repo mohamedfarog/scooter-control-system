@@ -4,7 +4,6 @@
 #include <QFile>
 #include <QSocketNotifier>
 
-
 Application::Application()
 {
 
@@ -18,29 +17,18 @@ Application::Application()
         connect(&m_ui, SIGNAL(rDataChanged()), this,SLOT(displayData()));
         m_cardReader.run();
         setPins();
-
 }
-
 
 void Application::run()
 {
  m_ui.show();
  displayData();
-
-
-
 }
-
-
 
 void Application::displayData()
 {
-
-
-        m_ui.displayScooterInGirne(m_db.returnGiScooters(), m_db.returnLefScooter(),
+    m_ui.displayScooterInGirne(m_db.returnGiScooters(), m_db.returnLefScooter(),
         m_db.returnMuScooters(), m_db.returnGoScooters(),m_db.returnGiSpots(), m_db.returnLeSpots(),m_db.returnMuSpots(),m_db.returnGoSpots());
-
-
 }
 
 void Application::setPins()
@@ -71,38 +59,29 @@ void Application::setPins()
     digitalWrite(26,LOW);
     digitalWrite(23,LOW);
     digitalWrite(24,LOW);
-
     qDebug()<<"PIN SET EMITED";
 
-
 }
+
 void Application::displayScooter_id()
 {
 
    m_ui.showScooter(m_db.returnScooter_id(), m_db.returnScooterId());
-
 }
 
 void Application::processNewCardFromDb()
 {
     setPins();
 
-
-
- QString id;
-   id = m_db.ReadCard(id);
-
-
-
+QString id;
+ id = m_db.ReadCard(id);
   if(id!=m_db.getRfid()){
       m_cardReader.run();
-
 
     }
    else{
       callGetOrReturn();
    }
-
 
  }
 void Application::setGetSpotId()
@@ -115,8 +94,6 @@ void Application::setReturnSpotId()
 {
      m_ui.displaySpotId(m_db.returnEmptySpotId());
 }
-
-
 void Application::callGetOrReturn()
 {
 
@@ -143,17 +120,16 @@ bool Application::checkScooterExist()const
 {
     return m_db.returnExistScooter();
 }
-bool Application::checkEmptySpotFirst()const{
+bool Application::checkEmptySpotFirst()const
+{
     return m_db.returnEmptySpotResult();
-
 }
-bool Application::checkFullSpotFirst()const{
+bool Application::checkFullSpotFirst()const
+{
     return m_db.returnFullSpotResult();
-
 }
 
 void Application::getName()
-
 {
 
     if (m_db.returnFullSpotResult() == true && m_db.returnExistScooter()== true){
@@ -162,9 +138,6 @@ void Application::getName()
     else {
       qDebug()<<"Sorry No full Spot";
     }
-
-
-
 }
 
 void Application::getReturnName()
@@ -178,38 +151,37 @@ void Application::getReturnName()
 
 }
 
-
 QString Application::getCurrentScooterId()const
 {
         return m_db.returnScooter_id();
-
 }
 
 QString Application::getReturneedScooterId()const
 {
         return m_db.returnScooterId();
-
 }
 
 QString Application::showReturnSpotId()const
 {
 
         return m_db.returnEmptySpotId();
-
 }
+
 QString Application::showGetSpotId()const
 {
        return m_db.returnFullSpotId();
 }
+
 QString Application::getid()const
 {
          return m_db.getRfid();
-
 }
+
 int Application::countGiSpots()const
 {
         return m_db.returnGiSpots();
 }
+
 int Application::countMuSpots()const
 {
         return m_db.returnMuSpots();
@@ -219,13 +191,13 @@ int Application::countMuSpots()const
 int Application::countGoSpots()const
 {
         return m_db.returnGoSpots();
-
 }
 
 int Application::countLeSpots()const
 {
         return m_db.returnLeSpots();
 }
+
 int Application::countGiScooters()const
 {
       return m_db.returnGiScooters();
@@ -245,15 +217,14 @@ int Application::countMuScooters()const
 
 int Application::countGoScooters()const
 {
-
        return m_db.returnGoScooters();
-
 }
+
 QString Application::EmpCategory()const
 {
         return m_db.getCategory();
-
 }
+
 QString Application::getMyName()const
 {
         return m_db.getUser();
@@ -261,123 +232,105 @@ QString Application::getMyName()const
 
 bool Application::chekStatus()
 {
-
-
       return m_db.getstatus();
-
 }
-
 
 bool Application::checkSpot1()const
 {
         return m_db.getSpot1Status();
-
 }
+
 bool Application::checkSpot2()const
 {
          return m_db.getSpot2Status();
-
 }
+
 bool Application::checkSpot3()const
 {
           return m_db.getSpot3Status();
-
 }
+
 bool Application::checkSpot4()const
 {
           return m_db.getSpot4Status();
-
 }
+
 bool Application::checkSpot5()const
 {
         return m_db.getSpot5Status();
 
 }
+
 bool Application::checkSpot6()const
 {
          return m_db.getSpot6Status();
 
 }
-bool Application::checkSpot7()const{
-         return m_db.getSpot7Status();
 
+bool Application::checkSpot7()const
+{
+         return m_db.getSpot7Status();
 }
+
 bool Application::checkSpot8()const
 {
          return m_db.getSpot8Status();
-
 }
 bool Application::checkSpot9()const
 {
          return m_db.getSpot9Status();
-
 }
 bool Application::checkSpot10()const
 {
          return m_db.getSpot10Status();
-
 }
-
-
 
 void Application::unlockGetScooter()
 {
-
-
-        if (m_db.getSpot1Status()==true)
-        {
-                 unlockgetSpot1();
-        }
-        else if (m_db.getSpot2Status()==true)
-        {
-                unlockgetSpot2();
-        }
-        else if (m_db.getSpot3Status()==true)
-        {
-                unlockgetSpot3();
-        }
-        else if (m_db.getSpot4Status()==true)
-        {
-                unlockgetSpot4();
-
-        }
-        else if (m_db.getSpot5Status()==true)
-        {
-                unlockgetSpot5();
-
-        }
-        else if (m_db.getSpot6Status()==true)
-        {
-                  unlockgetSpot6();
-
-        }
-        else if (m_db.getSpot7Status()==true)
-        {
-                 unlockgetSpot7();
-        }
-        else if (m_db.getSpot8Status()==true)
-        {
-                  unlockgetSpot8();
-
-        }
-        else if (m_db.getSpot9Status()==true)
-        {
-                  unlockgetSpot9();
-
-        }
-        else if (m_db.getSpot10Status()==true)
-        {
-                 unlockgetSpot10();
-        }
-        else {
-                qDebug()<<"NO Spot is full";
-        }
-
-
-
-      m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
-
-
+    if (m_db.getSpot1Status()==true)
+    {
+        unlockgetSpot1();
+    }
+    else if (m_db.getSpot2Status()==true)
+    {
+        unlockgetSpot2();
+    }
+    else if (m_db.getSpot3Status()==true)
+    {
+        unlockgetSpot3();
+    }
+    else if (m_db.getSpot4Status()==true)
+    {
+        unlockgetSpot4();
+    }
+    else if (m_db.getSpot5Status()==true)
+    {
+        unlockgetSpot5();
+    }
+    else if (m_db.getSpot6Status()==true)
+    {
+        unlockgetSpot6();
+    }
+    else if (m_db.getSpot7Status()==true)
+    {
+        unlockgetSpot7();
+    }
+    else if (m_db.getSpot8Status()==true)
+    {
+        unlockgetSpot8();
+    }
+    else if (m_db.getSpot9Status()==true)
+    {
+        unlockgetSpot9();
+    }
+    else if (m_db.getSpot10Status()==true)
+    {
+        unlockgetSpot10();
+    }
+    else {
+        qDebug()<<"NO Spot is full";
+    }
+    m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
 }
 
 void Application::unLock1()
@@ -388,6 +341,7 @@ void Application::unLock1()
     digitalWrite(23,LOW);
     digitalWrite(24,LOW);
 }
+
 void Application::lock1()
 {
     digitalWrite(23,HIGH);
@@ -396,9 +350,9 @@ void Application::lock1()
     digitalWrite(23,LOW);
     digitalWrite(24,LOW);
 }
+
 void Application::unlockgetSpot1()
 {
-
     digitalWrite(15,HIGH);
     digitalWrite(16,LOW);
     digitalWrite(0,LOW);
@@ -416,8 +370,8 @@ void Application::unlockgetSpot1()
     qDebug()<<"SPOT 1 IS UNLOCKED";
     m_db.updateGetSpot1();
 
-
 }
+
 void Application::unlockgetSpot2()
 {
 
@@ -442,8 +396,6 @@ void Application::unlockgetSpot2()
 
 void Application::unlockgetSpot3()
 {
-
-
     digitalWrite(15,LOW);
     digitalWrite(16,LOW);
     digitalWrite(0,HIGH);
@@ -506,8 +458,8 @@ void Application::unlockgetSpot5()
 
 }
 
-void Application::unlockgetSpot6(){
-
+void Application::unlockgetSpot6()
+{
 
     digitalWrite(15,LOW);
     digitalWrite(16,LOW);
@@ -589,8 +541,6 @@ void Application::unlockgetSpot9()
     setPins();
     qDebug()<<"SPOT 9 IS UNLOCKED";
     m_db.updateGetSpot9();
-
-
 }
 
 void Application::unlockgetSpot10()
@@ -614,76 +564,56 @@ void Application::unlockgetSpot10()
     m_db.updateGetSpot10();
 }
 
-
-
-
 void Application::unlockReturnScooter()
 {
 
-        if (m_db.getSpot1Status()==false)
-        {
-                unlockReturnSpot1();
-
-        }
-        else if (m_db.getSpot2Status()==false)
-        {
-                  unlockReturnSpot2();
-
-        }
-        else if (m_db.getSpot3Status()==false)
-        {
-                 unlockReturnSpot3();
-        }
-        else if (m_db.getSpot4Status()==false)
-        {
-                 unlockReturnSpot4();
-
-        }
-        else if (m_db.getSpot5Status()==false)
-        {
-                 unlockReturnSpot5();
-
-        }
-        else if (m_db.getSpot6Status()==false)
-        {
-                unlockReturnSpot6();
-
-        }
-        else if (m_db.getSpot7Status()==false)
-        {
-                unlockReturnSpot7();
-
-
-        }
-        else if (m_db.getSpot8Status()==false)
-        {
-                unlockReturnSpot8();
-
-
-        }
-        else if (m_db.getSpot9Status()==false)
-        {
-                unlockReturnSpot9();
-
-
-        }
-        else if (m_db.getSpot10Status()==false)
-        {
-                unlockReturnSpot10();
-
-        }
-        else {
-
-                qDebug()<<"NO Spot is empty";
-        }
-
-                qDebug()<<"returnPinHasGoneHigh";
-                m_db.returnQuery();
-
-
+    if (m_db.getSpot1Status()==false)
+    {
+        unlockReturnSpot1();
+    }
+    else if (m_db.getSpot2Status()==false)
+    {
+        unlockReturnSpot2();
+    }
+    else if (m_db.getSpot3Status()==false)
+    {
+        unlockReturnSpot3();
+    }
+    else if (m_db.getSpot4Status()==false)
+    {
+        unlockReturnSpot4();
+    }
+    else if (m_db.getSpot5Status()==false)
+    {
+        unlockReturnSpot5();
+    }
+    else if (m_db.getSpot6Status()==false)
+    {
+        unlockReturnSpot6();
+    }
+    else if (m_db.getSpot7Status()==false)
+    {
+        unlockReturnSpot7();
+    }
+    else if (m_db.getSpot8Status()==false)
+    {
+        unlockReturnSpot8();
+    }
+    else if (m_db.getSpot9Status()==false)
+    {
+        unlockReturnSpot9();
+    }
+    else if (m_db.getSpot10Status()==false)
+    {
+            unlockReturnSpot10();
+    }
+    else 
+    {
+        qDebug()<<"NO Spot is empty";
+    }
+    qDebug()<<"returnPinHasGoneHigh";
+    m_db.returnQuery();
 }
-
-
 
 void Application::unlockReturnSpot1()
 {
@@ -706,6 +636,7 @@ void Application::unlockReturnSpot1()
     m_db.updateReturnSpot1();
 
 }
+
 void Application::unlockReturnSpot2()
 {
 
@@ -727,6 +658,7 @@ void Application::unlockReturnSpot2()
     m_db.updateReturnSpot2();
 
 }
+
 void Application::unlockReturnSpot3()
 {
 
@@ -747,6 +679,7 @@ void Application::unlockReturnSpot3()
     m_db.updateReturnSpot3();
 
 }
+
 void Application::unlockReturnSpot4()
 {
 
@@ -768,6 +701,7 @@ void Application::unlockReturnSpot4()
     qDebug()<<"SPOT retuen 4 IS UNLOCKED";
     m_db.updateReturnSpot4();
 }
+
 void Application::unlockReturnSpot5()
 {
 
@@ -787,8 +721,8 @@ void Application::unlockReturnSpot5()
     setPins();
     qDebug()<<"SPOT retuen 5 IS UNLOCKED";
     m_db.updateReturnSpot5();
-
 }
+
 void Application::unlockReturnSpot6()
 {
 
@@ -808,8 +742,8 @@ void Application::unlockReturnSpot6()
     setPins();
     qDebug()<<"SPOT retuen 6 IS UNLOCKED";
     m_db.updateReturnSpot6();
-
 }
+
 void Application::unlockReturnSpot7()
 {
     digitalWrite(15,LOW);
@@ -830,6 +764,7 @@ void Application::unlockReturnSpot7()
     m_db.updateReturnSpot7();
 
 }
+
 void Application::unlockReturnSpot8()
 {
 
@@ -851,6 +786,7 @@ void Application::unlockReturnSpot8()
     m_db.updateReturnSpot8();
 
 }
+
 void Application::unlockReturnSpot9()
 {
 
@@ -872,6 +808,7 @@ void Application::unlockReturnSpot9()
     m_db.updateReturnSpot9();
 
 }
+
 void Application::unlockReturnSpot10()
 {
 
