@@ -8,6 +8,7 @@
 #include "cardreader.h"
 #include "wiringPi.h"
 #include <QScrollArea>
+//#include "modules/pin/pinmanager.h"
 #include <QString>
 #include <QThread>
 

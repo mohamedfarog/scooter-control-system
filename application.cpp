@@ -46,7 +46,7 @@ void Application::displayData()
 void Application::setPins()
 {
 
-    wiringPiSetup();
+    //wiringPiSetup();
     pinMode(15,OUTPUT);
     pinMode(16,OUTPUT);
     pinMode(0,OUTPUT);
