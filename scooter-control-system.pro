@@ -7,6 +7,10 @@
 QT       += core gui
 QT       += sql
 QT       += core gui sql
+INCLUDEPATH += /usr/local/include
+LIBS     += -L"/usr/local/lib"
+LIBS     += -lwiringPi
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -31,29 +35,13 @@ SOURCES += \
     cardreader.cpp \
     application.cpp \
     database.cpp \
-    modules/common/filemanager.cpp \
-    modules/pin/pin-controllers/pcimx6ixoralinux.cpp \
-    modules/pin/pin-controllers/pcrpi3linux.cpp \
-    modules/pin/pin-controllers/pctk1ixoralinux.cpp \
-    modules/pin/ipclinux.cpp \
-    modules/pin/pinmanager.cpp \
-    modules/pin/pinsystem.cpp
 
 HEADERS += \
         mainwindow.h \
     cardreader.h \
     application.h \
     database.h \
-    modules/common/filemanager.h \
-    modules/common/globals.h \
-    modules/pin/pin-controllers/pcimx6ixoralinux.h \
-    modules/pin/pin-controllers/pcrpi3linux.h \
-    modules/pin/pin-controllers/pctk1ixoralinux.h \
-    modules/pin/idpins.h \
-    modules/pin/ipclinux.h \
-    modules/pin/ipincontroller.h \
-    modules/pin/pinmanager.h \
-    modules/pin/pinsystem.h
+
 
 FORMS += \
   mainwindow.ui

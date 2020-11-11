@@ -54,14 +54,8 @@ public slots:
         void returnMain();
         void showScooter(QString scooter_id, QString rScooterId);
         void displaySpotId(QString spot_id);
-        void on_btn_stationGi_clicked();
-        void on_btngi_res_for_me_clicked();      
         void on_btnlef_res_for_me_clicked();
         void on_btn_stationLe_clicked();
-        void on_btn_stationM_clicked();
-        void on_btnm_res_for_me_clicked();
-        void on_btn_stationGo_clicked();
-        void on_btngo_res_for_me_clicked();
         void on_un_lock_clicked();
         void on_btn_return_clicked();
         void on_un_lock_2_clicked();

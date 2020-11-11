@@ -8,7 +8,6 @@
 #include <string>
 #include <QString>
 #include <mainwindow.h>
-#include "modules/pin/pinmanager.h"
 
 
 
@@ -22,7 +21,6 @@ public:
         int connect(QString host, QString dbuname, QString pwd, QString dbName);
 
 
-        Pin::PinManager m_pinManager;
 
 
 

@@ -1,16 +1,14 @@
-
-
 #include "application.h"
 #include <QDebug>
 #include <QString>
 #include <QFile>
 #include <QSocketNotifier>
+
+
 Application::Application()
 {
 
-       m_db.connect("10.80.3.120", "dg3", "password3", "gunseldb1" );
-
-
+        m_db.connect("10.69.1.16", "dg1", "gunsel2", "gunseldb1" );
         connect(&m_cardReader,SIGNAL(newCardAvailableOnDb()),this,SLOT(processNewCardFromDb()));
         connect(&m_ui,SIGNAL(getIsCalled()),this, SLOT(unlockGetScooter()));
         connect(&m_ui,SIGNAL(settingPins()),this, SLOT(setPins()));
@@ -19,10 +17,9 @@ Application::Application()
         connect(&m_ui, SIGNAL(dataChanged()), this,SLOT(displayData()));
         connect(&m_ui, SIGNAL(rDataChanged()), this,SLOT(displayData()));
         m_cardReader.run();
-
+        setPins();
 
 }
-
 
 
 void Application::run()
@@ -48,46 +45,36 @@ void Application::displayData()
 
 void Application::setPins()
 {
+
+    wiringPiSetup();
+    pinMode(15,OUTPUT);
+    pinMode(16,OUTPUT);
+    pinMode(0,OUTPUT);
+    pinMode(1,OUTPUT);
+    pinMode(2,OUTPUT);
+    pinMode(3,OUTPUT);
+    pinMode(4,OUTPUT);
+    pinMode(5,OUTPUT);
+    pinMode(8,OUTPUT);
+    pinMode(26,OUTPUT);
+    pinMode(23,OUTPUT);
+    pinMode(24,OUTPUT);
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
+    digitalWrite(23,LOW);
+    digitalWrite(24,LOW);
+
     qDebug()<<"PIN SET EMITED";
 
-    m_pinManager.enablePin(8);
-    m_pinManager.pinMode(8, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.enablePin(10);
-    m_pinManager.pinMode(10, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.enablePin(11);
-    m_pinManager.pinMode(11, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.enablePin(12);
-    m_pinManager.pinMode(12, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(12, false);
 
-    m_pinManager.enablePin(13);
-    m_pinManager.pinMode(13, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.enablePin(15);
-    m_pinManager.pinMode(15, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.enablePin(16);
-    m_pinManager.pinMode(16, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.enablePin(18);
-    m_pinManager.pinMode(18, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.enablePin(3);
-    m_pinManager.pinMode(3, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(3, false);
-    m_pinManager.enablePin(32);
-    m_pinManager.pinMode(32, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(32, false);
-    //OPEN AND CLOSE PINS
-    m_pinManager.enablePin(33);
-    m_pinManager.pinMode(33, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(33, false);
-    m_pinManager.enablePin(35);
-    m_pinManager.pinMode(35, Pin::G::OUTPUT);
-    m_pinManager.digitalWrite(35, false);
 }
 void Application::displayScooter_id()
 {
@@ -393,235 +380,215 @@ void Application::unlockGetScooter()
 
 }
 
-
-
-
-
 void Application::unLock1()
 {
-        m_pinManager.digitalWrite(33,false);
-        m_pinManager.digitalWrite(35, true);
-        sleep(5);
-        m_pinManager.digitalWrite(33,false);
-        m_pinManager.digitalWrite(35, false);
-
+    digitalWrite(23,LOW);
+    digitalWrite(24,HIGH);
+    sleep(5);
+    digitalWrite(23,LOW);
+    digitalWrite(24,LOW);
 }
 void Application::lock1()
 {
-        m_pinManager.digitalWrite(33,true);
-        m_pinManager.digitalWrite(35, false);
-        sleep(5);
-        m_pinManager.digitalWrite(33,false);
-        m_pinManager.digitalWrite(35, false);
-
+    digitalWrite(23,HIGH);
+    digitalWrite(24,LOW);
+    sleep(5);
+    digitalWrite(23,LOW);
+    digitalWrite(24,LOW);
 }
 void Application::unlockgetSpot1()
 {
 
- //pins for locker 1 go low to open and go heigh to close
-    m_pinManager.digitalWrite(8, true);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
-        unLock1();
-        sleep(5);
-        lock1();
-        qDebug()<<"SPOT 1 IS UNLOCKED";
-        m_db.updateGetSpot1();
+    digitalWrite(15,HIGH);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
+    unLock1();
+    sleep(5);
+    lock1();
+    setPins();
+    qDebug()<<"SPOT 1 IS UNLOCKED";
+    m_db.updateGetSpot1();
 
 
 }
 void Application::unlockgetSpot2()
 {
-       //pins for locker 2 go low to open and go heigh to close
 
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, true);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
-        unLock1();
-        sleep(5);
-        lock1();
-        qDebug()<<"SPOT 2 IS UNLOCKED";
-
-       m_db.updateGetSpot2();
-
-
-
+    digitalWrite(15,LOW);
+    digitalWrite(16,HIGH);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
+    unLock1();
+    sleep(5);
+    lock1();
+    setPins();
+    qDebug()<<"SPOT 2 IS UNLOCKED";
+    m_db.updateGetSpot2();
 
 }
 
 void Application::unlockgetSpot3()
 {
-        //pins for locker 3 go low to open and go heigh to close
 
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, true);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
+
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,HIGH);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
     unLock1();
     sleep(5);
     lock1();
-     qDebug()<<"SPOT 3 IS UNLOCKED";
-        m_db.updateGetSpot3();
-
-
-
-
+    setPins();
+    qDebug()<<"SPOT 3 IS UNLOCKED";
+    m_db.updateGetSpot3();
 }
 
-void Application::unlockgetSpot4(){
+void Application::unlockgetSpot4()
+{
 
-        //pins for locker 4 go low to open and go heigh to close
-
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, true);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
-        unLock1();
-        sleep(5);
-        lock1();
-
-        qDebug()<<"SPOT 4 IS UNLOCKED";
-        m_db.updateGetSpot4();
-
-
-
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,HIGH);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
+    unLock1();
+    sleep(5);
+    lock1();
+    setPins();
+    qDebug()<<"SPOT 4 IS UNLOCKED";
+    m_db.updateGetSpot4();
 }
 
 void Application::unlockgetSpot5()
 {
-        //pins for locker 5 go low to open and go heigh to close
 
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, true);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3, false);
-    m_pinManager.digitalWrite(32, false);
-       unLock1();
-       sleep(5);
-       lock1();
-
-
-        qDebug()<<"SPOT 5 IS UNLOCKED";
-        m_db.updateGetSpot5();
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,HIGH);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
+    unLock1();
+    sleep(5);
+    lock1();
+    setPins();
+    qDebug()<<"SPOT 5 IS UNLOCKED";
+    m_db.updateGetSpot5();
 
 
 }
 
 void Application::unlockgetSpot6(){
 
-       //pins for locker 6 go low to open and go heigh to close
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, true);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3, false);
-    m_pinManager.digitalWrite(32, false);
-     unLock1();
-     sleep(5);
-     lock1();
-        qDebug()<<"SPOT 6 IS UNLOCKED";
-        m_db.updateGetSpot6();
 
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,HIGH);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
+    unLock1();
+    sleep(5);
+    lock1();
+    setPins();
+    qDebug()<<"SPOT 6 IS UNLOCKED";
+    m_db.updateGetSpot6();
 }
 
 void Application::unlockgetSpot7()
 {
-        //pins for locker 7 go low to open and go heigh to close
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, true);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3, false);
-    m_pinManager.digitalWrite(32, false);
+
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,HIGH);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
     unLock1();
     sleep(5);
     lock1();
-
-        qDebug()<<"SPOT 7 IS UNLOCKED";
-        m_db.updateGetSpot7();
+    setPins();
+    qDebug()<<"SPOT 7 IS UNLOCKED";
+    m_db.updateGetSpot7();
 
 }
 
 void Application::unlockgetSpot8()
 {
 
-       //pins for locker 8 go low to open and go heigh to close
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, true);
-    m_pinManager.digitalWrite(3, false);
-    m_pinManager.digitalWrite(32, false);
-     unLock1();
-     sleep(5);
-     lock1();
-        qDebug()<<"SPOT 8 IS UNLOCKED";
-        m_db.updateGetSpot8();
-
-
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,HIGH);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
+    unLock1();
+    sleep(5);
+    lock1();
+    setPins();
+    qDebug()<<"SPOT 8 IS UNLOCKED";
+    m_db.updateGetSpot8();
 }
 
 void Application::unlockgetSpot9()
 {
-      //pins for locker 9 go low to open and go heigh to close
-      m_pinManager.digitalWrite(8, false);
-      m_pinManager.digitalWrite(10, false);
-      m_pinManager.digitalWrite(11, false);
-      m_pinManager.digitalWrite(12, false);
-      m_pinManager.digitalWrite(13, false);
-      m_pinManager.digitalWrite(15, false);
-      m_pinManager.digitalWrite(16, false);
-      m_pinManager.digitalWrite(18, false);
-      m_pinManager.digitalWrite(3, true);
-      m_pinManager.digitalWrite(32, false);
-      unLock1();
-      sleep(5);
-      lock1();
-      qDebug()<<"SPOT 9 IS UNLOCKED";
-       m_db.updateGetSpot9();
+
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,HIGH);
+    digitalWrite(26,LOW);
+    unLock1();
+    sleep(5);
+    lock1();
+    setPins();
+    qDebug()<<"SPOT 9 IS UNLOCKED";
+    m_db.updateGetSpot9();
 
 
 }
@@ -629,20 +596,20 @@ void Application::unlockgetSpot9()
 void Application::unlockgetSpot10()
 {
 
-       //pins for locker 10 go low to open and go heigh to close
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3, false);
-    m_pinManager.digitalWrite(32, true);
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,HIGH);
     unLock1();
     sleep(5);
     lock1();
+    setPins();
     qDebug()<<"SPOT 10 IS UNLOCKED";
     m_db.updateGetSpot10();
 }
@@ -652,8 +619,6 @@ void Application::unlockgetSpot10()
 
 void Application::unlockReturnScooter()
 {
-
-
 
         if (m_db.getSpot1Status()==false)
         {
@@ -723,217 +688,208 @@ void Application::unlockReturnScooter()
 void Application::unlockReturnSpot1()
 {
 
-       //pins for locker 1 go low to open and go heigh to close to rturn scooter
-
-    m_pinManager.digitalWrite(8, true);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
+    digitalWrite(15,HIGH);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
     unLock1();
     sleep(5);
     lock1();
-       qDebug()<<"SPOT retuen 1 IS UNLOCKED";
-       m_db.updateReturnSpot1();
+    setPins();
+    qDebug()<<"SPOT retuen 1 IS UNLOCKED";
+    m_db.updateReturnSpot1();
 
 }
 void Application::unlockReturnSpot2()
 {
-        //pins for locker 1 go low to open and go heigh to close to rturn scooter
 
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, true);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
+    digitalWrite(15,LOW);
+    digitalWrite(16,HIGH);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
     unLock1();
     sleep(5);
     lock1();
-        qDebug()<<"SPOT retuen 2 IS UNLOCKED";
-        m_db.updateReturnSpot2();
-
-
+    setPins();
+    qDebug()<<"SPOT retuen 2 IS UNLOCKED";
+    m_db.updateReturnSpot2();
 
 }
 void Application::unlockReturnSpot3()
 {
-       //pins for locker 1 go low to open and go heigh to close to rturn scooter
-         qDebug()<<"SPOT retuen 3 IS UNLOCKED";
-         m_pinManager.digitalWrite(8, false);
-         m_pinManager.digitalWrite(10, false);
-         m_pinManager.digitalWrite(11, true);
-         m_pinManager.digitalWrite(12, false);
-         m_pinManager.digitalWrite(13, false);
-         m_pinManager.digitalWrite(15, false);
-         m_pinManager.digitalWrite(16, false);
-         m_pinManager.digitalWrite(18, false);
-         m_pinManager.digitalWrite(3,  false);
-         m_pinManager.digitalWrite(32, false);
-         unLock1();
-         sleep(5);
-         lock1();
-         m_db.updateReturnSpot3();
+
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,HIGH);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
+    unLock1();
+    sleep(5);
+    lock1();
+    setPins();
+    m_db.updateReturnSpot3();
 
 }
 void Application::unlockReturnSpot4()
 {
 
-         //pins for locker 1 go low to open and go heigh to close to rturn scooter      
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, true);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
+
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,HIGH);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
     unLock1();
     sleep(5);
     lock1();
-         qDebug()<<"SPOT retuen 4 IS UNLOCKED";
-         m_db.updateReturnSpot4();
-
-
+    setPins();
+    qDebug()<<"SPOT retuen 4 IS UNLOCKED";
+    m_db.updateReturnSpot4();
 }
 void Application::unlockReturnSpot5()
 {
 
-         //pins for locker 1 go low to open and go heigh to close to rturn scooter
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, true);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,HIGH);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
     unLock1();
     sleep(5);
     lock1();
+    setPins();
     qDebug()<<"SPOT retuen 5 IS UNLOCKED";
     m_db.updateReturnSpot5();
 
 }
 void Application::unlockReturnSpot6()
 {
-        //pins for locker 1 go low to open and go heigh to close to rturn scooter
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, true);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
+
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,HIGH);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
     unLock1();
     sleep(5);
     lock1();
-        qDebug()<<"SPOT retuen 6 IS UNLOCKED";
-        m_db.updateReturnSpot6();
-
-
-
+    setPins();
+    qDebug()<<"SPOT retuen 6 IS UNLOCKED";
+    m_db.updateReturnSpot6();
 
 }
 void Application::unlockReturnSpot7()
 {
-
-          //pins for locker 1 go low to open and go heigh to close to rturn scooter
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, true);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,HIGH);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
     unLock1();
     sleep(5);
     lock1();
-        qDebug()<<"SPOT retuen 7 IS UNLOCKED";
-        m_db.updateReturnSpot7();
-
+    setPins();
+    qDebug()<<"SPOT retuen 7 IS UNLOCKED";
+    m_db.updateReturnSpot7();
 
 }
 void Application::unlockReturnSpot8()
 {
 
-        //pins for locker 1 go low to open and go heigh to close to rturn scooter
-    m_pinManager.digitalWrite(8, false);
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, true);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, false);
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,HIGH);
+    digitalWrite(8,LOW);
+    digitalWrite(26,LOW);
     unLock1();
     sleep(5);
     lock1();
-        qDebug()<<"SPOT retuen 8 IS UNLOCKED";
-        m_db.updateReturnSpot8();
-
-
+    setPins();
+    qDebug()<<"SPOT retuen 8 IS UNLOCKED";
+    m_db.updateReturnSpot8();
 
 }
 void Application::unlockReturnSpot9()
 {
 
-        //pins for locker 1 go low to open and go heigh to close to rturn scooter
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  true);
-    m_pinManager.digitalWrite(32, false);
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,HIGH);
+    digitalWrite(26,LOW);
     unLock1();
     sleep(5);
     lock1();
-        qDebug()<<"SPOT retuen 9 IS UNLOCKED";
-        m_db.updateReturnSpot9();
-
+    setPins();
+    qDebug()<<"SPOT retuen 9 IS UNLOCKED";
+    m_db.updateReturnSpot9();
 
 }
 void Application::unlockReturnSpot10()
 {
 
-         //pins for locker 1 go low to open and go heigh to close to rturn scooter
-    m_pinManager.digitalWrite(10, false);
-    m_pinManager.digitalWrite(11, false);
-    m_pinManager.digitalWrite(12, false);
-    m_pinManager.digitalWrite(13, false);
-    m_pinManager.digitalWrite(15, false);
-    m_pinManager.digitalWrite(16, false);
-    m_pinManager.digitalWrite(18, false);
-    m_pinManager.digitalWrite(3,  false);
-    m_pinManager.digitalWrite(32, true);
+    digitalWrite(15,LOW);
+    digitalWrite(16,LOW);
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(26,HIGH);
     unLock1();
     sleep(5);
     lock1();
-        qDebug()<<"SPOT retuen 10 IS UNLOCKED";
-        m_db.updateReturnSpot10();
+    setPins();
+    qDebug()<<"SPOT retuen 10 IS UNLOCKED";
+    m_db.updateReturnSpot10();
 
 }

@@ -11,9 +11,9 @@ import sys
 import RPi.GPIO as GPIO
 
 mydb = mysql.connector.connect(
-        host="10.80.3.120",
-        user="dg3",
-        passwd="password3",
+        host="10.69.1.16",
+        user="dg1",
+        passwd="gunsel2",
         database="gunseldb1",
 
 )

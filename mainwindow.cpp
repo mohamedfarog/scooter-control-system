@@ -254,15 +254,9 @@ void MainWindow::returnMain()
         ui->btn_stationGi->setStyleSheet("border: 0px solid #0086FF;");
         ui->btn_stationLe->setStyleSheet("border: 0px solid #0086FF;");
         ui->btn_stationM->setStyleSheet("border: 0px solid #0086FF;");
-        ui->btn_stationGo->setStyleSheet("border: 0px solid #0086FF;");
-        ui->btngi_res_for_me->setVisible(false);
-        ui->btngi_5min_res->setVisible(false);
+        ui->btn_stationGo->setStyleSheet("border: 0px solid #0086FF;");      
         ui->btnlef_res_for_me->setVisible(false);
         ui->btnlef_5min_res->setVisible(false);
-        ui->btnm_res_for_me->setVisible(false);
-        ui->btnm_5min_res->setVisible(false);
-        ui->btngo_res_for_me->setVisible(false);
-        ui->btngo_5min_res->setVisible(false);
         startView();
 
 
@@ -292,7 +286,6 @@ void MainWindow::return_scooter()
 
         ui->return_current_station->setText("Lefkosa Station");
         ui->return_current_station->setStyleSheet("color: white; font-family: Roboto condensed; Font : 18pt;");
-        qDebug()<<"return is Running";
 
         ui->get_spot->setVisible(false);
         ui->scs_Welcome->setVisible(false);
@@ -370,37 +363,6 @@ void MainWindow::open_return_sopt()
 
 
 
-void MainWindow::on_btn_stationGi_clicked()
-{
-
-
-        ui->btngi_res_for_me->setVisible(true);
-        ui->btngi_res_for_me->setText("Reserve for me");
-        ui->btngi_res_for_me->setStyleSheet("background-color: #44484B; color:white; font-family: Roboto condensed; Font: 12pt");
-        ui->btn_stationGi->setStyleSheet("border: 10px solid #0086FF;");
-
-}
-
-void MainWindow::on_btngi_res_for_me_clicked()
-
-{
-    ui->btngi_5min_res->setText("Reserved");
-    ui->btngi_5min_res->setStyleSheet("background-color: #44484B; color:white; font-family: Roboto condensed; Font: 12pt");
-    ui->btngi_res_for_me->setVisible(false);
-    ui->btngi_5min_res->setVisible(true); 
-
-
-
-    QTimer::singleShot(2000, [=](){
-          ui->btngi_res_for_me->setVisible(false);
-          ui->btngi_5min_res->setVisible(false);
-          ui->btn_stationGi->setStyleSheet("border: 0px solid #0086FF;");
-          reserve_spot();
-          open_get_spot();
-});
-
-
-}
 
 
 
@@ -437,70 +399,6 @@ void MainWindow::on_btnlef_res_for_me_clicked()
 }
 
 
-
-
-void MainWindow::on_btn_stationM_clicked()
-{
-        ui->btnm_res_for_me->setVisible(true);
-        ui->btnm_res_for_me->setText("Reserve for me");
-        ui->btnm_res_for_me->setStyleSheet("background-color: #44484B; color:white; font-family: Roboto condensed; Font: 12pt");
-        ui->btn_stationM->setStyleSheet("border: 10px solid #0086FF;");
-
-}
-
-
-void MainWindow::on_btnm_res_for_me_clicked()
-{
-        ui->btnm_res_for_me->setText("Reserved");
-        ui->btnm_res_for_me->setStyleSheet("background-color: #44484B; color:white; font-family: Roboto condensed; Font: 12pt");
-        ui->btnm_res_for_me->setVisible(false);
-        ui->btnm_res_for_me->setVisible(true);
-
-
-        QTimer::singleShot(2000, [=](){
-              ui->btnm_res_for_me->setVisible(false);
-              ui->btnm_res_for_me->setVisible(false);
-              ui->btn_stationM->setStyleSheet("border: 0px solid #0086FF;");
-              reserve_spot();
-              open_get_spot();
-    });
-
-
-}
-
-
-void MainWindow::on_btn_stationGo_clicked()
-{
-        ui->btngo_res_for_me->setVisible(true);
-        ui->btngo_res_for_me->setText("Reserve for me");
-        ui->btngo_res_for_me->setStyleSheet("background-color: #44484B; color:white; font-family: Roboto condensed; Font: 12pt");
-        ui->btn_stationGo->setStyleSheet("border: 10px solid #0086FF;");
-
-}
-
-void MainWindow::on_btngo_res_for_me_clicked()
-{
-
-        ui->btngo_res_for_me->setText("Reserved");
-        ui->btngo_res_for_me->setStyleSheet("background-color: #44484B; color:white; font-family: Roboto condensed; Font: 12pt");
-        ui->btngo_res_for_me->setVisible(false);
-        ui->btngo_res_for_me->setVisible(true);
-
-
-        QTimer::singleShot(2000, [=](){
-
-              ui->btngo_res_for_me->setVisible(false);
-              ui->btngo_res_for_me->setVisible(false);
-              ui->btn_stationGo->setStyleSheet("border: 0px solid #0086FF;");
-              reserve_spot();
-              open_get_spot();
-    });
-
-
-}
-
-
-
 void MainWindow::on_un_lock_clicked()
 {
         open_get_spot();
@@ -532,11 +430,7 @@ void MainWindow::on_btn_return_clicked()
 {
 
 
-    ui->return_spot->setVisible(true);
-    ui->scs_return->setVisible(false);
-    ui->get_spot->setVisible(false);
-    ui->scs_Welcome->setVisible(false);
-    ui->scs_mainMenu->setVisible(false);
+    reserve_spot();
     open_return_sopt();
 
 }
