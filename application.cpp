@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QSocketNotifier>
 
+
 Application::Application()
 {
 
@@ -17,71 +18,110 @@ Application::Application()
         connect(&m_ui, SIGNAL(rDataChanged()), this,SLOT(displayData()));
         m_cardReader.run();
         setPins();
+
 }
+
 
 void Application::run()
 {
  m_ui.show();
  displayData();
+
+
+
 }
+
+
 
 void Application::displayData()
 {
-    m_ui.displayScooterInGirne(m_db.returnGiScooters(), m_db.returnLefScooter(),
+
+
+        m_ui.displayScooterInGirne(m_db.returnGiScooters(), m_db.returnLefScooter(),
         m_db.returnMuScooters(), m_db.returnGoScooters(),m_db.returnGiSpots(), m_db.returnLeSpots(),m_db.returnMuSpots(),m_db.returnGoSpots());
+
+
 }
 
 void Application::setPins()
 {
 
-    //wiringPiSetup();
-    pinMode(15,OUTPUT);
-    pinMode(16,OUTPUT);
-    pinMode(0,OUTPUT);
-    pinMode(1,OUTPUT);
-    pinMode(2,OUTPUT);
-    pinMode(3,OUTPUT);
-    pinMode(4,OUTPUT);
-    pinMode(5,OUTPUT);
-    pinMode(8,OUTPUT);
-    pinMode(26,OUTPUT);
-    pinMode(23,OUTPUT);
-    pinMode(24,OUTPUT);
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
-    digitalWrite(23,LOW);
-    digitalWrite(24,LOW);
+    wiringPiSetup();
+    m_pinController.Mode(15,OUTPUT);
+    m_pinController.Mode(16,OUTPUT);
+    m_pinController.Mode(0,OUTPUT);
+    m_pinController.Mode(1,OUTPUT);
+    m_pinController.Mode(2,OUTPUT);
+    m_pinController.Mode(3,OUTPUT);
+    m_pinController.Mode(4,OUTPUT);
+    m_pinController.Mode(5,OUTPUT);
+    m_pinController.Mode(8,OUTPUT);
+    m_pinController.Mode(26,OUTPUT);
+    m_pinController.Mode(23,OUTPUT);
+    m_pinController.Mode(24,OUTPUT);    
+    m_pinController.Mode(25,OUTPUT);
+    m_pinController.Mode(9,OUTPUT);
+    m_pinController.Mode(7,OUTPUT);
+    m_pinController.Mode(22,OUTPUT);
+    m_pinController.Mode(21,OUTPUT);
+    m_pinController.Mode(11,OUTPUT);
+    m_pinController.Mode(27,OUTPUT);
+    m_pinController.Mode(20,OUTPUT);
+    m_pinController.Mode(29,OUTPUT);
+
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0,LOW);
+    m_pinController.Write(1,LOW);
+    m_pinController.Write(2,LOW);
+    m_pinController.Write(3,LOW);
+    m_pinController.Write(4,LOW);
+    m_pinController.Write(5,LOW);
+    m_pinController.Write(8,LOW);
+    m_pinController.Write(26,LOW);
+    m_pinController.Write(23,LOW);
+    m_pinController.Write(24,LOW);
+
+    m_pinController.Write(25,HIGH);
+    m_pinController.Write(9,HIGH);
+    m_pinController.Write(7,HIGH);
+    m_pinController.Write(22,HIGH);
+    m_pinController.Write(21,HIGH);
+    m_pinController.Write(11,HIGH);
+    m_pinController.Write(27,HIGH);
+    m_pinController.Write(20,HIGH);
+    m_pinController.Write(29,HIGH);
     qDebug()<<"PIN SET EMITED";
 
-}
 
+}
 void Application::displayScooter_id()
 {
 
    m_ui.showScooter(m_db.returnScooter_id(), m_db.returnScooterId());
+
 }
 
 void Application::processNewCardFromDb()
 {
     setPins();
 
-QString id;
- id = m_db.ReadCard(id);
+
+
+ QString id;
+   id = m_db.ReadCard(id);
+
+
+
   if(id!=m_db.getRfid()){
       m_cardReader.run();
+
 
     }
    else{
       callGetOrReturn();
    }
+
 
  }
 void Application::setGetSpotId()
@@ -94,6 +134,8 @@ void Application::setReturnSpotId()
 {
      m_ui.displaySpotId(m_db.returnEmptySpotId());
 }
+
+
 void Application::callGetOrReturn()
 {
 
@@ -120,16 +162,17 @@ bool Application::checkScooterExist()const
 {
     return m_db.returnExistScooter();
 }
-bool Application::checkEmptySpotFirst()const
-{
+bool Application::checkEmptySpotFirst()const{
     return m_db.returnEmptySpotResult();
+
 }
-bool Application::checkFullSpotFirst()const
-{
+bool Application::checkFullSpotFirst()const{
     return m_db.returnFullSpotResult();
+
 }
 
 void Application::getName()
+
 {
 
     if (m_db.returnFullSpotResult() == true && m_db.returnExistScooter()== true){
@@ -138,6 +181,9 @@ void Application::getName()
     else {
       qDebug()<<"Sorry No full Spot";
     }
+
+
+
 }
 
 void Application::getReturnName()
@@ -151,37 +197,38 @@ void Application::getReturnName()
 
 }
 
+
 QString Application::getCurrentScooterId()const
 {
         return m_db.returnScooter_id();
+
 }
 
 QString Application::getReturneedScooterId()const
 {
         return m_db.returnScooterId();
+
 }
 
 QString Application::showReturnSpotId()const
 {
 
         return m_db.returnEmptySpotId();
-}
 
+}
 QString Application::showGetSpotId()const
 {
        return m_db.returnFullSpotId();
 }
-
 QString Application::getid()const
 {
          return m_db.getRfid();
-}
 
+}
 int Application::countGiSpots()const
 {
         return m_db.returnGiSpots();
 }
-
 int Application::countMuSpots()const
 {
         return m_db.returnMuSpots();
@@ -191,13 +238,13 @@ int Application::countMuSpots()const
 int Application::countGoSpots()const
 {
         return m_db.returnGoSpots();
+
 }
 
 int Application::countLeSpots()const
 {
         return m_db.returnLeSpots();
 }
-
 int Application::countGiScooters()const
 {
       return m_db.returnGiScooters();
@@ -217,14 +264,15 @@ int Application::countMuScooters()const
 
 int Application::countGoScooters()const
 {
-       return m_db.returnGoScooters();
-}
 
+       return m_db.returnGoScooters();
+
+}
 QString Application::EmpCategory()const
 {
         return m_db.getCategory();
-}
 
+}
 QString Application::getMyName()const
 {
         return m_db.getUser();
@@ -232,598 +280,839 @@ QString Application::getMyName()const
 
 bool Application::chekStatus()
 {
+
+
       return m_db.getstatus();
+
 }
+
 
 bool Application::checkSpot1()const
 {
         return m_db.getSpot1Status();
-}
 
+}
 bool Application::checkSpot2()const
 {
          return m_db.getSpot2Status();
-}
 
+}
 bool Application::checkSpot3()const
 {
           return m_db.getSpot3Status();
-}
 
+}
 bool Application::checkSpot4()const
 {
           return m_db.getSpot4Status();
-}
 
+}
 bool Application::checkSpot5()const
 {
         return m_db.getSpot5Status();
 
 }
-
 bool Application::checkSpot6()const
 {
          return m_db.getSpot6Status();
 
 }
-
-bool Application::checkSpot7()const
-{
+bool Application::checkSpot7()const{
          return m_db.getSpot7Status();
-}
 
+}
 bool Application::checkSpot8()const
 {
          return m_db.getSpot8Status();
+
 }
 bool Application::checkSpot9()const
 {
          return m_db.getSpot9Status();
+
 }
 bool Application::checkSpot10()const
 {
          return m_db.getSpot10Status();
+
 }
+
+
 
 void Application::unlockGetScooter()
 {
-    if (m_db.getSpot1Status()==true)
-    {
-        unlockgetSpot1();
-    }
-    else if (m_db.getSpot2Status()==true)
-    {
-        unlockgetSpot2();
-    }
-    else if (m_db.getSpot3Status()==true)
-    {
-        unlockgetSpot3();
-    }
-    else if (m_db.getSpot4Status()==true)
-    {
-        unlockgetSpot4();
-    }
-    else if (m_db.getSpot5Status()==true)
-    {
-        unlockgetSpot5();
-    }
-    else if (m_db.getSpot6Status()==true)
-    {
-        unlockgetSpot6();
-    }
-    else if (m_db.getSpot7Status()==true)
-    {
-        unlockgetSpot7();
-    }
-    else if (m_db.getSpot8Status()==true)
-    {
-        unlockgetSpot8();
-    }
-    else if (m_db.getSpot9Status()==true)
-    {
-        unlockgetSpot9();
-    }
-    else if (m_db.getSpot10Status()==true)
-    {
-        unlockgetSpot10();
-    }
-    else {
-        qDebug()<<"NO Spot is full";
-    }
-    m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
+
+
+        if (m_db.getSpot1Status()==true)
+        {
+                 unlockgetSpot1();
+        }
+        else if (m_db.getSpot2Status()==true)
+        {
+                unlockgetSpot2();
+        }
+        else if (m_db.getSpot3Status()==true)
+        {
+                unlockgetSpot3();
+        }
+        else if (m_db.getSpot4Status()==true)
+        {
+                unlockgetSpot4();
+
+        }
+        else if (m_db.getSpot5Status()==true)
+        {
+                unlockgetSpot5();
+
+        }
+        else if (m_db.getSpot6Status()==true)
+        {
+                  unlockgetSpot6();
+
+        }
+        else if (m_db.getSpot7Status()==true)
+        {
+                 unlockgetSpot7();
+        }
+        else if (m_db.getSpot8Status()==true)
+        {
+                  unlockgetSpot8();
+
+        }
+        else if (m_db.getSpot9Status()==true)
+        {
+                  unlockgetSpot9();
+
+        }
+        else if (m_db.getSpot10Status()==true)
+        {
+                 unlockgetSpot10();
+        }
+        else {
+                qDebug()<<"NO Spot is full";
+        }
 }
 
 void Application::unLock1()
 {
-    digitalWrite(23,LOW);
-    digitalWrite(24,HIGH);
+    m_pinController.Write(23,LOW);
+    m_pinController.Write(24,HIGH);
     sleep(5);
-    digitalWrite(23,LOW);
-    digitalWrite(24,LOW);
+    m_pinController.Write(23,LOW);
+    m_pinController.Write(24,LOW);
 }
-
 void Application::lock1()
 {
-    digitalWrite(23,HIGH);
-    digitalWrite(24,LOW);
+    m_pinController.Write(23,HIGH);
+    m_pinController.Write(24,LOW);
     sleep(5);
-    digitalWrite(23,LOW);
-    digitalWrite(24,LOW);
+    m_pinController.Write(23,LOW);
+    m_pinController.Write(24,LOW);
 }
-
 void Application::unlockgetSpot1()
-{
-    digitalWrite(15,HIGH);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+{  
+    int check = 0;
+
+    m_pinController.Write(15,HIGH);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT 1 IS UNLOCKED";
-    m_db.updateGetSpot1();
+    while(check!=1)
+    {
+        int sensor = m_pinController.Read(25);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if(sensor==1)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
+            m_db.updateGetSpot1();
+            sleep(2);
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 1 IS UNLOCKED";
+            break;
 
+    }
+ }
 }
 
 void Application::unlockgetSpot2()
 {
-
-    digitalWrite(15,LOW);
-    digitalWrite(16,HIGH);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    int check = 0;
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,HIGH);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT 2 IS UNLOCKED";
-    m_db.updateGetSpot2();
-
+    while(check!=1){
+        int sensor = m_pinController.Read(9);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if (sensor==1)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
+            m_db.updateGetSpot2();
+            sleep(2);
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 2 IS UNLOCKED";
+            break;
+        }
+    }
 }
 
 void Application::unlockgetSpot3()
 {
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,HIGH);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    int check = 0;
+
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, HIGH);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT 3 IS UNLOCKED";
-    m_db.updateGetSpot3();
+    while(check!=1){
+        int sensor = m_pinController.Read(7);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if (sensor==1)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
+            m_db.updateGetSpot3();
+            sleep(2);
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 2 IS UNLOCKED";
+            break;
+        }
+    }
 }
 
 void Application::unlockgetSpot4()
 {
-
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,HIGH);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    int check = 0;
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, HIGH);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT 4 IS UNLOCKED";
-    m_db.updateGetSpot4();
+    while(check!=1){
+        int sensor = m_pinController.Read(22);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if (sensor==1)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
+            m_db.updateGetSpot4();
+            sleep(2);
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 2 IS UNLOCKED";
+            break;
+        }
+    }
 }
 
 void Application::unlockgetSpot5()
 {
-
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,HIGH);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    int check = 0;
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, HIGH);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT 5 IS UNLOCKED";
-    m_db.updateGetSpot5();
-
+    while(check!=1){
+        int sensor = m_pinController.Read(21);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if (sensor==1)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
+            m_db.updateGetSpot5();
+            sleep(2);
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 2 IS UNLOCKED";
+            break;
+        }
+    }
 
 }
 
-void Application::unlockgetSpot6()
-{
+void Application::unlockgetSpot6(){
 
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,HIGH);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    int check=0;
+
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, HIGH);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
-    sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT 6 IS UNLOCKED";
-    m_db.updateGetSpot6();
+    sleep(5);    
+    while(check!=1){
+        int sensor = m_pinController.Read(11);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if (sensor==1)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
+            m_db.updateGetSpot6();
+            sleep(2);
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 2 IS UNLOCKED";
+            break;
+        }
+    }
 }
 
 void Application::unlockgetSpot7()
 {
+    int check = 0;
 
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,HIGH);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, HIGH);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT 7 IS UNLOCKED";
-    m_db.updateGetSpot7();
+
+    while(check!=1){
+        int sensor = m_pinController.Read(27);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if (sensor==1)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
+            m_db.updateGetSpot7();
+            sleep(2);
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 2 IS UNLOCKED";
+            break;
+        }
+    }
 
 }
 
 void Application::unlockgetSpot8()
 {
-
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,HIGH);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    int check = 0;
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, HIGH);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT 8 IS UNLOCKED";
-    m_db.updateGetSpot8();
+
+    while(check!=1){
+        int sensor = m_pinController.Read(20);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if (sensor==1)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
+            m_db.updateGetSpot8();
+            sleep(2);
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 2 IS UNLOCKED";
+            break;
+        }
+    }
+
 }
 
 void Application::unlockgetSpot9()
 {
-
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,HIGH);
-    digitalWrite(26,LOW);
+    int check = 0;
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, HIGH);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT 9 IS UNLOCKED";
-    m_db.updateGetSpot9();
+    while(check!=1){
+        int sensor = m_pinController.Read(29);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if (sensor==1)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.getQuery(m_db.getEmployee_id(), m_db.getCategory());
+            m_db.updateGetSpot9();
+            sleep(2);
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 2 IS UNLOCKED";
+            break;
+        }
+    }
+
 }
+
 
 void Application::unlockgetSpot10()
 {
 
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,HIGH);
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,HIGH);
     unLock1();
-    sleep(5);
+    sleep(10);
+    m_db.updateGetSpot9();
     lock1();
     setPins();
     qDebug()<<"SPOT 10 IS UNLOCKED";
     m_db.updateGetSpot10();
 }
 
+
+
+
 void Application::unlockReturnScooter()
 {
 
-    if (m_db.getSpot1Status()==false)
-    {
-        unlockReturnSpot1();
-    }
-    else if (m_db.getSpot2Status()==false)
-    {
-        unlockReturnSpot2();
-    }
-    else if (m_db.getSpot3Status()==false)
-    {
-        unlockReturnSpot3();
-    }
-    else if (m_db.getSpot4Status()==false)
-    {
-        unlockReturnSpot4();
-    }
-    else if (m_db.getSpot5Status()==false)
-    {
-        unlockReturnSpot5();
-    }
-    else if (m_db.getSpot6Status()==false)
-    {
-        unlockReturnSpot6();
-    }
-    else if (m_db.getSpot7Status()==false)
-    {
-        unlockReturnSpot7();
-    }
-    else if (m_db.getSpot8Status()==false)
-    {
-        unlockReturnSpot8();
-    }
-    else if (m_db.getSpot9Status()==false)
-    {
-        unlockReturnSpot9();
-    }
-    else if (m_db.getSpot10Status()==false)
-    {
-            unlockReturnSpot10();
-    }
-    else 
-    {
-        qDebug()<<"NO Spot is empty";
-    }
-    qDebug()<<"returnPinHasGoneHigh";
-    m_db.returnQuery();
+        if (m_db.getSpot1Status()==false)
+        {
+                unlockReturnSpot1();
+
+        }
+        else if (m_db.getSpot2Status()==false)
+        {
+                  unlockReturnSpot2();
+
+        }
+        else if (m_db.getSpot3Status()==false)
+        {
+                 unlockReturnSpot3();
+        }
+        else if (m_db.getSpot4Status()==false)
+        {
+                 unlockReturnSpot4();
+
+        }
+        else if (m_db.getSpot5Status()==false)
+        {
+                 unlockReturnSpot5();
+
+        }
+        else if (m_db.getSpot6Status()==false)
+        {
+                unlockReturnSpot6();
+
+        }
+        else if (m_db.getSpot7Status()==false)
+        {
+                unlockReturnSpot7();
+
+
+        }
+        else if (m_db.getSpot8Status()==false)
+        {
+                unlockReturnSpot8();
+
+
+        }
+        else if (m_db.getSpot9Status()==false)
+        {
+                unlockReturnSpot9();
+
+
+        }
+        else if (m_db.getSpot10Status()==false)
+        {
+                unlockReturnSpot10();
+
+        }
+        else {
+
+                qDebug()<<"NO Spot is empty";
+        }
+
+                qDebug()<<"returnPinHasGoneHigh";
+
 }
+
+
 
 void Application::unlockReturnSpot1()
 {
-
-    digitalWrite(15,HIGH);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    int check = 0;
+    m_pinController.Write(15,HIGH);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT retuen 1 IS UNLOCKED";
-    m_db.updateReturnSpot1();
+    while(check!=1)
+    {
+        int sensor = m_pinController.Read(25);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if(sensor==0)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.returnQuery();
+            m_db.updateReturnSpot1();
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 1 IS UNLOCKED";
+            break;
 
+    }
+  }
 }
-
 void Application::unlockReturnSpot2()
 {
-
-    digitalWrite(15,LOW);
-    digitalWrite(16,HIGH);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    int check = 0;
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,HIGH);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT retuen 2 IS UNLOCKED";
-    m_db.updateReturnSpot2();
+    while(check!=1)
+    {
+        int sensor = m_pinController.Read(9);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if(sensor==0)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.returnQuery();
+            m_db.updateReturnSpot2();
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 1 IS UNLOCKED";
+            break;
 
+    }
+  }
 }
-
 void Application::unlockReturnSpot3()
 {
+    int check = 0;
 
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,HIGH);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, HIGH);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    m_db.updateReturnSpot3();
+    while(check!=1)
+    {
+        int sensor = m_pinController.Read(7);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if(sensor==0)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.returnQuery();
+            m_db.updateReturnSpot3();
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 1 IS UNLOCKED";
+            break;
 
+    }
+  }
 }
-
 void Application::unlockReturnSpot4()
 {
+    int check = 0;
 
-
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,HIGH);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, HIGH);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT retuen 4 IS UNLOCKED";
-    m_db.updateReturnSpot4();
-}
+    while(check!=1)
+    {
+        int sensor = m_pinController.Read(22);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if(sensor==0)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.returnQuery();
+            m_db.updateReturnSpot4();
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 1 IS UNLOCKED";
+            break;
 
+    }
+  }
+}
 void Application::unlockReturnSpot5()
 {
+    int check = 0;
 
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,HIGH);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, HIGH);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT retuen 5 IS UNLOCKED";
-    m_db.updateReturnSpot5();
-}
+    while(check!=1)
+    {
+        int sensor = m_pinController.Read(21);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if(sensor==0)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.returnQuery();
+            m_db.updateReturnSpot5();
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 1 IS UNLOCKED";
+            break;
 
+    }
+  }
+}
 void Application::unlockReturnSpot6()
 {
+    int check = 0;
 
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,HIGH);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, HIGH);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT retuen 6 IS UNLOCKED";
-    m_db.updateReturnSpot6();
+    while(check!=1)
+    {
+        int sensor = m_pinController.Read(11);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if(sensor==0)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.returnQuery();
+            m_db.updateReturnSpot6();
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 1 IS UNLOCKED";
+            break;
+
+    }
+  }
 }
 
 void Application::unlockReturnSpot7()
 {
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,HIGH);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    int check = 0;
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, HIGH);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT retuen 7 IS UNLOCKED";
-    m_db.updateReturnSpot7();
+    while(check!=1)
+    {
+        int sensor = m_pinController.Read(27);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if(sensor==0)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.returnQuery();
+            m_db.updateReturnSpot7();
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 1 IS UNLOCKED";
+            break;
 
+    }
+  }
 }
 
 void Application::unlockReturnSpot8()
 {
+    int check = 0;
 
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,HIGH);
-    digitalWrite(8,LOW);
-    digitalWrite(26,LOW);
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, HIGH);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT retuen 8 IS UNLOCKED";
-    m_db.updateReturnSpot8();
+    while(check!=1)
+    {
+        int sensor = m_pinController.Read(20);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if(sensor==0)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.returnQuery();
+            m_db.updateReturnSpot8();
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 1 IS UNLOCKED";
+            break;
 
+    }
+  }
 }
 
 void Application::unlockReturnSpot9()
 {
+    int check = 0;
 
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,HIGH);
-    digitalWrite(26,LOW);
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, HIGH);
+    m_pinController.Write(26,LOW);
     unLock1();
     sleep(5);
-    lock1();
-    setPins();
-    qDebug()<<"SPOT retuen 9 IS UNLOCKED";
-    m_db.updateReturnSpot9();
+    while(check!=1)
+    {
+        int sensor = m_pinController.Read(29);
+        qDebug()<<"SENSOR IS NOT DETECTED";
+        if(sensor==0)
+        {
+            qDebug()<<"SENSOR IS DETECTED NOW";
+            m_db.returnQuery();
+            m_db.updateReturnSpot9();
+            lock1();
+            setPins();
+            qDebug()<<"SPOT 1 IS UNLOCKED";
+            break;
 
+    }
+  }
 }
-
 void Application::unlockReturnSpot10()
 {
 
-    digitalWrite(15,LOW);
-    digitalWrite(16,LOW);
-    digitalWrite(0,LOW);
-    digitalWrite(1,LOW);
-    digitalWrite(2,LOW);
-    digitalWrite(3,LOW);
-    digitalWrite(4,LOW);
-    digitalWrite(5,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(26,HIGH);
+    m_pinController.Write(15,LOW);
+    m_pinController.Write(16,LOW);
+    m_pinController.Write(0, LOW);
+    m_pinController.Write(1, LOW);
+    m_pinController.Write(2, LOW);
+    m_pinController.Write(3, LOW);
+    m_pinController.Write(4, LOW);
+    m_pinController.Write(5, LOW);
+    m_pinController.Write(8, LOW);
+    m_pinController.Write(26,HIGH);
     unLock1();
-    sleep(5);
+    sleep(10);
     lock1();
     setPins();
     qDebug()<<"SPOT retuen 10 IS UNLOCKED";

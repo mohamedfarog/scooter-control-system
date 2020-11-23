@@ -6,9 +6,8 @@
 #include <QApplication>
 #include "database.h"
 #include "cardreader.h"
-#include "wiringPi.h"
+#include "pincontroller.h"
 #include <QScrollArea>
-//#include "modules/pin/pinmanager.h"
 #include <QString>
 #include <QThread>
 
@@ -109,6 +108,7 @@ private:
 
         Database m_db;
         CardReader m_cardReader;
+        PinController m_pinController;
         MainWindow m_ui;
         QTimer *pinDelay;
 

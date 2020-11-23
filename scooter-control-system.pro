@@ -35,12 +35,14 @@ SOURCES += \
     cardreader.cpp \
     application.cpp \
     database.cpp \
+    pincontroller.cpp
 
 HEADERS += \
         mainwindow.h \
     cardreader.h \
     application.h \
     database.h \
+    pincontroller.h
 
 
 FORMS += \
